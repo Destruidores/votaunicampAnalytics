@@ -1,6 +1,6 @@
 ---
 title: "Vota Unicamp!"
-author: "Benilton S Carvalho"
+author: "Ana Flávia Polisel, Bruna Mendes Heyn, Eliane Ramos de Siqueira, Gustavo Cordeiro, Michelly Wu Hishe e Natalia Rodrigues Nascimento"
 output: html_document
 ---
 
