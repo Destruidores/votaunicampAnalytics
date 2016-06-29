@@ -4,9 +4,8 @@ author: "Benilton S Carvalho"
 output: html_document
 ---
 
+```{r input, message=FALSE, echo=FALSE}
 ## Setup
-
-```{r input, message=FALSE}
 Sys.setlocale(locale='UTF-8')
 library(stringr)
 library(rvest)
@@ -14,12 +13,11 @@ library(googleVis)
 library(leaflet)
 page = read_html('http://votaunicamp.herokuapp.com/results/', encoding='UTF-8')
 tbl = html_table(page)[[2]]
-head(tbl)
+##head(tbl)
 ```
 
+```{r format, echo=FALSE}
 ## Formatação de Dados
-
-```{r format}
 mytbl = data.frame(codigo=as.integer(str_extract(tbl$Curso, "^\\d+")),
                    nivel=NA,
                    curso=gsub("^(\\d+) - (.*)$", "\\2", tbl$Curso),
@@ -34,7 +32,42 @@ nivel[is.na(nivel)] = "Graduacao"
 mytbl$nivel = nivel
 rm(nivel)
 mytbl$curso = gsub("(Mes|Dou).+ em (.*)$", "\\2", mytbl$curso)
-head(mytbl)
+##head(mytbl)
+```
+
+##Tabela dos dados
+
+```{r tabela de dados, echo=FALSE}
+library(DT)
+datatable(mytbl, options = list(pageLength = 10))
+```
+
+##Separação por àreas
+```{r separaçãoareas, echo=FALSE}
+graduacao=filter(mytbl, nivel=="Graduacao")
+exatas=filter(graduacao, curso=="Matemática" | curso=="Engenharia Mecânica" | curso =="Estatística")
+biologicas=filter(graduacao, curso=="")
+exatas=filter(graduacao, codigo=="1" | codigo=="2")
+
+
+```
+
+
+##Teste de Hipótese para proporção
+
+```{r teste de hipotese para propor??o}
+##Queremos mostrar que a fra??o de sim n?o excede 50% do total de votos v?lidos
+
+total=sum(mytbl$total)
+sim=sum(mytbl$sim)
+nao=sum(mytbl$nao)
+
+x=matrix(c(sim,nao),1,2)
+teste=prop.test(x,p=0.5,alternative = "less", conf.level = 0.95)
+
+teste
+
+##Rejeita-se a hip?tese nula, pois o p-valor ? muito pequeno.
 ```
 
 ## Gauge Plots
@@ -58,13 +91,14 @@ Obter localizações (lat/lon) por meio do OpenStreet Maps:
 - Olhar o endereço na barra de endereço após o zoom
 - Atualizar o data.frame abaixo com as informações
 
-```{r enderecos}
-ends = data.frame(instituto=c('IMECC', 'FEM', 'FEF'),
-           lat=c(-22.81583,-22.81938,-22.81476),
-           lon=c(-47.06769,-47.06592,-47.07333))
+```{r enderecos,  echo=FALSE}
+ends = data.frame(instituto=c('IMECC', 'FEM', 'FEF', 'IA' , 'IEL' , 'IFCH' , 'IFGW', 'IQ' , 'IB' , 'FEEC' , 'FEQ' , 'FE' , 'IE' , 'IC' , 'FEC' , 'FEAGRI' , 'FCM', 'IG' , 'FEA'),
+           lat=c(-22.81583,-22.81938,-22.81476,-22.815127,-22.815121,-22.814924,-22.816778,-22.818993,-22.819333,-22.821286,-22.820336,-22.816466, -22.814952,-22.814663,-22.816503,-22.819405,-22.831345,-22.813084,-22.820475),
+           lon=c(-47.06769,-47.06592,-47.07333,-47.070112,-47.069397,-47.068303,-47.067328,-47.068038,-47.069402,-47.065894,-47.065617,-47.065728,-47.066153,-47.064811,-47.061943,-47.060955,-47.062188,-47.068574,-47.067189))
+
 map = leaflet()
 map = addTiles(map)
-map = addCircleMarkers(map, lat=ends$lat, lng=ends$lon, popup = ends$instituto)
+map = addCircleMarkers(map, lat=ends$lat, lng=ends$lon, popup = ends$instituto, color = "purple")
 map
 ```
 
