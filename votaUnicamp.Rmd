@@ -45,10 +45,22 @@ datatable(mytbl, options = list(pageLength = 10))
 ##Separação por àreas
 ```{r separaçãoareas, echo=FALSE}
 graduacao=filter(mytbl, nivel=="Graduacao")
-exatas=filter(graduacao, curso=="Matemática" | curso=="Engenharia Mecânica" | curso =="Estatística")
-biologicas=filter(graduacao, curso=="")
-exatas=filter(graduacao, codigo=="1" | codigo=="2")
 
+##PROGRAMAS ESPECIAIS
+pespeciais=filter(graduacao,codigo=="200")
+
+##ARTES
+artes=filter(graduacao, codigo=="26"|codigo=="25"| codigo=="64"|codigo=="23"|codigo=="22")
+
+##BIOLOGICAS
+biologicas=filter(graduacao,codigo=="6"|codigo=="100"|codigo=="27"|codigo=="45"|codigo=="21"|codigo=="63"|codigo=="58"|codigo=="46"|codigo=="15"|codigo=="107"|codigo=="14")
+
+##HUMANAS
+humanas=filter(graduacao,codigo=="109"| codigo=="110"| codigo=="17"| codigo=="47"| codigo=="16"|codigo=="44"| codigo=="75"|codigo=="30"| codigo=="54"| codigo=="55"|codigo=="19"
+|codigo=="7"|codigo=="57"|codigo=="56"|codigo=="18"|codigo=="20"|codigo=="38")
+
+##EXATAS
+exatas=filter(graduacao,codigo=="48"|codigo=="42"|codigo=="36"|codigo=="83"|codigo=="73"|codigo=="87"|codigo=="8"|codigo=="89"|codigo=="12"|codigo=="13"|codigo=="43"|codigo=="34"|codigo=="49"|codigo=="101"|codigo=="102"|codigo=="88"|codigo=="11"|codigo=="41"|codigo=="108"|codigo=="10"|codigo=="9"|codigo=="39"|codigo=="2"|codigo=="4"|codigo=="53"|codigo=="40"|codigo=="29"|codigo=="1"|codigo=="28"|codigo=="51"|codigo=="5"|codigo=="50"|codigo=="94)
 
 ```
 
